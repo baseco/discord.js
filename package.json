@@ -1,9 +1,13 @@
 {
-  "name": "discord.js",
+  "name": "@baseco/discord.js",
   "version": "12.3.1",
   "description": "A powerful library for interacting with the Discord API",
   "main": "./src/index",
   "types": "./typings/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/baseco/discord.js.git"
+  },
   "exports": {
     ".": [
       {
@@ -24,11 +28,7 @@
     "lint:typings": "tslint typings/index.d.ts",
     "prettier": "prettier --write src/**/*.js typings/**/*.ts",
     "build:browser": "webpack",
-    "prepublishOnly": "npm run test && cross-env NODE_ENV=production npm run build:browser"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/discordjs/discord.js.git"
+    "prepublishOnly": "cross-env NODE_ENV=production npm run build:browser"
   },
   "keywords": [
     "discord",

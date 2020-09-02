@@ -19,10 +19,14 @@ declare module 'discord.js' {
 
   export const version: string;
 
+  // Base's quest evaluators store data on activities and voice state. Keys are `${definition.id}-${criterion.id}` and the values are per-evaluator
+  export type BaseEvalData = Map<string, any>;
+
   //#region Classes
 
   export class Activity {
     constructor(presence: Presence, data?: object);
+    public baseEvalData?: BaseEvalData;
     public applicationID: Snowflake | null;
     public assets: RichPresenceAssets | null;
     public readonly createdAt: Date;
@@ -1227,6 +1231,7 @@ declare module 'discord.js' {
 
   export class Presence {
     constructor(client: Client, data?: object);
+    public game: Activity;
     public activities: Activity[];
     public clientStatus: ClientPresenceStatusData | null;
     public flags: Readonly<ActivityFlags>;
@@ -1718,6 +1723,7 @@ declare module 'discord.js' {
 
   export class VoiceState extends Base {
     constructor(guild: Guild, data: object);
+    public baseEvalData?: BaseEvalData;
     public readonly channel: VoiceChannel | null;
     public channelID?: Snowflake;
     public readonly connection: VoiceConnection | null;

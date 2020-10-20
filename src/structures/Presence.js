@@ -5,6 +5,9 @@ const ActivityFlags = require('../util/ActivityFlags');
 const { ActivityTypes } = require('../util/Constants');
 const Util = require('../util/Util');
 
+// Xbox globally reports a specific ID and we special case it
+const XBOX_DISCORD_APP_ID = '438122941302046720';
+
 /**
  * Activity sent in a message.
  * @typedef {Object} MessageActivity
@@ -230,7 +233,12 @@ class Activity {
      * Application ID associated with this activity
      * @type {?Snowflake}
      */
-    this.applicationID = data.application_id || null;
+
+    this.applicationID = data.application_id
+      ? data.application_id === XBOX_DISCORD_APP_ID
+        ? null
+        : data.application_id
+      : null;
 
     /**
      * Timestamps for the activity

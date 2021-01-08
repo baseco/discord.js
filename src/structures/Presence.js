@@ -96,10 +96,7 @@ class Presence {
 
       if (this.game) {
         // If its the same game, we want to carry forward the evaluation map
-        if (
-          (this.game.applicationID && data.game.applicationID && this.game.applicationID === data.game.applicationID) ||
-          (this.game.name && data.game.name && this.game.name === data.game.name)
-        ) {
+        if (this.game.applicationID && data.game.applicationID && this.game.applicationID === data.game.applicationID) {
           this.game = new Activity(this, data.game, this.game.baseEvalData);
         } else {
           this.game = new Activity(this, data.game);
@@ -127,10 +124,9 @@ class Presence {
         if (this.activities && this.activities.length) {
           currentActivity = this.activities.find(activity => {
             if (
-              (activity.applicationID &&
-                newActivity.applicationID &&
-                activity.applicationID === newActivity.applicationID) ||
-              (activity.name && newActivity.name && activity.name === newActivity.name)
+              activity.applicationID &&
+              newActivity.applicationID &&
+              activity.applicationID === newActivity.applicationID
             ) {
               return true;
             }

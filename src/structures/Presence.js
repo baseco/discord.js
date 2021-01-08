@@ -88,59 +88,14 @@ class Presence {
      */
     this.status = data.status || this.status || 'offline';
 
-    if (data.game) {
-      /**
-       * The game they're currently playing
-       * @type {Activity[]}
-       */
-
-      if (this.game) {
-        // If its the same game, we want to carry forward the evaluation map
-        if (this.game.applicationID && data.game.applicationID && this.game.applicationID === data.game.applicationID) {
-          this.game = new Activity(this, data.game, this.game.baseEvalData);
-        } else {
-          this.game = new Activity(this, data.game);
-        }
-      } else {
-        this.game = new Activity(this, data.game);
-      }
-    } else {
-      this.game = undefined;
-    }
-
     if (data.activities) {
       /**
        * The activities of this presence
        * @type {Activity[]}
        */
-
-      const newActivities = [];
-
-      for (let i = 0; i < data.activities.length; i += 1) {
-        // If its the same game, we want to carry forward the evaluation map
-        const newActivity = data.activities[i];
-
-        let currentActivity;
-        if (this.activities && this.activities.length) {
-          currentActivity = this.activities.find(activity => {
-            if (
-              activity.applicationID &&
-              newActivity.applicationID &&
-              activity.applicationID === newActivity.applicationID
-            ) {
-              return true;
-            }
-            return false;
-          });
-        }
-        newActivities.push(new Activity(this, newActivity, currentActivity && currentActivity.baseEvalData));
-      }
-
-      this.activities = newActivities;
-    } else if (data.game) {
-      // If there's a game, we've already created an Activity object and set it to this.game
-      // also set it to activities to match original Discord.js implementation
-      this.activities = [this.game];
+      this.activities = data.activities.map(activity => new Activity(this, activity));
+    } else if (data.activity || data.game) {
+      this.activities = [new Activity(this, data.game || data.activity)];
     } else {
       this.activities = [];
     }
@@ -190,10 +145,8 @@ class Presence {
  * Represents an activity that is part of a user's presence.
  */
 class Activity {
-  constructor(presence, data, baseEvalData) {
+  constructor(presence, data) {
     Object.defineProperty(this, 'presence', { value: presence });
-
-    this.baseEvalData = baseEvalData || null;
 
     /**
      * The name of the activity being played

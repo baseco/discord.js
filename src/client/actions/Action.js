@@ -24,7 +24,7 @@ class GenericAction {
   }
 
   getPayload(data, manager, id, partialType, cache) {
-    if (!manager.cache) {
+    if (!manager || !manager.cache) {
       return
     }
     const existing = manager.cache.get(id);
